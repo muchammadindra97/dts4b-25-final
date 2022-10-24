@@ -1,8 +1,9 @@
 import React from 'react';
-import {Box, Container, Link, Typography} from "@mui/material";
+import {Box, Button, Container, Link, Stack, Typography} from "@mui/material";
 import {Link as RouterLink} from "react-router-dom";
+import Copyright from "./Copyright";
 
-function NotFound() {
+function LockedDisplay() {
   return (
     <Box
       sx={{
@@ -19,20 +20,33 @@ function NotFound() {
           color="text.primary"
           gutterBottom
         >
-          404
+          Content Locked!
         </Typography>
         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-          The page you are looking for is not found!
+          You must log in to access the content.
         </Typography>
+        <Stack
+          sx={{ pt: 4 }}
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+        >
+          <Button component={RouterLink} variant="outlined" to="/login">
+            Login
+          </Button>
+          <Button component={RouterLink} variant="contained" disableElevation to="/registration">
+            Sign up
+          </Button>
+        </Stack>
         <Typography align="center" variant="body2" color="text.secondary" sx={{ mt: 5 }}>
           <Link to="/" component={RouterLink}>
             &gt; Back to Home
           </Link>
         </Typography>
-        <Container />
+        <Copyright />
       </Container>
     </Box>
   );
 }
 
-export default NotFound;
+export default LockedDisplay;

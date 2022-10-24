@@ -4,7 +4,7 @@ import {Link as RouterLink} from "react-router-dom";
 
 function Navbar() {
   return (
-    <Toolbar sx={{ marginBottom: 3, paddingLeft: 0, paddingRight: 0 }}>
+    <Toolbar sx={{ marginBottom: 3}} disableGutters>
       <Typography
         component="h2"
         variant="h5"

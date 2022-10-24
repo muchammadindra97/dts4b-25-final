@@ -6,6 +6,7 @@ import {
   Typography
 } from "@mui/material";
 import {Outlet, Link as RouterLink} from "react-router-dom";
+import Copyright from "../components/Copyright";
 
 function AuthLayout() {
   return (
@@ -25,14 +26,7 @@ function AuthLayout() {
       >
         <Outlet />
       </Box>
-      <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
-        {'Copyright © '}
-        <Link color="inherit" to="/" component={RouterLink}>
-          React News
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
+      <Copyright />
     </Container>
   );
 }

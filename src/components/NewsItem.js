@@ -7,16 +7,20 @@ function NewsItem(props) {
 
   return (
     <Grid item xs={12} md={4} sm={6}>
-      <CardActionArea component={RouterLink} to="/detail" sx={{borderRadius: ".75rem"}}>
+      <CardActionArea component={RouterLink} to={`/detail/${news.uuid}`} sx={{borderRadius: ".75rem", height: '100%'}}>
         <Card variant="outlined" sx={{borderStyle: 'none'}}>
           <CardMedia
-            component="img"
-            height="200"
-            image={news.image_url}
-            alt={news.source}
-            sx={{borderRadius: ".75rem"}}
+            component="div"
+            sx={{
+              borderRadius: ".75rem",
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundImage: `url(${news.image_url})`,
+              height: "200px"
+          }}
           />
-          <CardContent sx={{paddingLeft: '0', paddingRight: '0'}}>
+          <CardContent sx={{paddingLeft: '.5rem', paddingRight: '.5rem', '&:last-child': { pb: '.5rem' }}}>
             <Typography component="h3" variant="h6" sx={{lineHeight: '1.5rem'}}>
               {news.title}
             </Typography>

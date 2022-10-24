@@ -26,11 +26,19 @@ export const newsApi = createApi({
     }),
     getAllNews: builder.query({
       query: (limit = 5) => `/all?sort=published_on&language=en&limit=${limit}`
-    })
+    }),
+    getNewsByUUID: builder.query({
+      query: (uuid) => `/uuid/${uuid}`
+    }),
+    getSimilarNewsByUUID: builder.query({
+      query: (uuid, limit = 3) => `/similar/${uuid}?limit=${limit}&language=en`
+    }),
   })
 });
 
 export const {
   useGetTopStoriesQuery,
-  useGetAllNewsQuery
+  useGetAllNewsQuery,
+  useGetNewsByUUIDQuery,
+  useGetSimilarNewsByUUIDQuery
 } = newsApi;

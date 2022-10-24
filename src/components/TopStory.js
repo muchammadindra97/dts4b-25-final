@@ -19,8 +19,6 @@ function TopStory(props) {
           height: '100%'
         }}
       >
-        {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src={news.image_url} alt={news.source} />}
         <Box
           sx={{
             position: 'absolute',
@@ -47,7 +45,7 @@ function TopStory(props) {
               <Typography variant="p" color="inherit" paragraph>
                 {news.snippet}
               </Typography>
-              <Link component={RouterLink} variant="subtitle1" to="/detail" sx={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>
+              <Link component={RouterLink} variant="subtitle1" to={`/detail/${news.uuid}`} sx={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>
                 Continue...
               </Link>
             </Box>
