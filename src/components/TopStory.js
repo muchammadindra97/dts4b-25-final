@@ -11,16 +11,16 @@ function TopStory(props) {
         sx={{
           position: 'relative',
           color: '#fff',
-          mb: 4,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(${news.image})`,
-          borderRadius: '.75rem'
+          backgroundImage: `url(${news.image_url})`,
+          borderRadius: '.75rem',
+          height: '100%'
         }}
       >
         {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src={news.image} alt={news.imageText} />}
+        {<img style={{ display: 'none' }} src={news.image_url} alt={news.source} />}
         <Box
           sx={{
             position: 'absolute',
@@ -45,10 +45,10 @@ function TopStory(props) {
                 {news.title}
               </Typography>
               <Typography variant="p" color="inherit" paragraph>
-                {news.description}
+                {news.snippet}
               </Typography>
               <Link component={RouterLink} variant="subtitle1" to="/detail" sx={{color: 'white', textDecoration: 'none', fontWeight: 'bold'}}>
-                {news.linkText}
+                Continue...
               </Link>
             </Box>
           </Grid>
