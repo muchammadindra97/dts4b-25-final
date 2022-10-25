@@ -1,6 +1,7 @@
 import React from 'react';
 import {Box, Grid, Link, Paper, Typography} from "@mui/material";
 import {Link as RouterLink} from "react-router-dom";
+import {convertDate} from "../utils/helper";
 
 function TopStory(props) {
   const {news} = props;
@@ -41,6 +42,9 @@ function TopStory(props) {
             >
               <Typography component="h1" variant="h5" color="inherit" gutterBottom>
                 {news.title}
+              </Typography>
+              <Typography component="p" variant="subtitle2" color="inherit" gutterBottom>
+                {convertDate(news.published_at)}
               </Typography>
               <Typography variant="p" color="inherit" paragraph>
                 {news.snippet}

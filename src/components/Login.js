@@ -1,10 +1,20 @@
 import React, {Fragment, useState} from 'react';
 import {Avatar, Box, Button, Link, TextField, Typography} from "@mui/material";
 import {LockOutlined} from "@mui/icons-material";
-import {Link as RouterLink} from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import {auth} from "../configs/firebase";
+import {show as showSnackbar} from "../stores/snackbarSlice";
+import {login as setLogin} from "../stores/authSlice";
+
+const initialForm = {email: '', password: ''};
 
 function Login() {
-  const [form, setForm] = useState({email: '', password: ''});
+  const [form, setForm] = useState(initialForm);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const inputFieldHandler = (event) => {
     const inputTarget = event.target;
@@ -17,9 +27,33 @@ function Login() {
     });
   };
 
-  const formSubmitHandler = (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(form);
+
+    if(event.target.reportValidity() === false) return;
+
+    setIsProcessing(true);
+
+    try {
+      const result = await signInWithEmailAndPassword(auth, form.email, form.password);
+      const user = result.user.toJSON();
+      dispatch(setLogin({user}));
+      setForm(initialForm);
+      dispatch(showSnackbar({
+        title: 'Success',
+        severity: 'success',
+        message: 'Login success!'
+      }));
+      navigate('/');
+    } catch (e) {
+      dispatch(showSnackbar({
+        title: 'Error',
+        severity: 'error',
+        message: `${e.message}`
+      }));
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -61,6 +95,7 @@ function Login() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={isProcessing}
         >
           Sign In
         </Button>

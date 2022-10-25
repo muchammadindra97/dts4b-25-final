@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, CardActionArea, CardContent, CardMedia, Grid, Typography} from "@mui/material";
 import {Link as RouterLink} from "react-router-dom";
+import {convertDate} from "../utils/helper";
 
 function NewsItem(props) {
   const {news} = props;
@@ -25,7 +26,7 @@ function NewsItem(props) {
               {news.title}
             </Typography>
             <Typography variant="p" color="text.secondary">
-              {new Date(news.published_at).toDateString()}
+              {convertDate(news.published_at)}
             </Typography>
           </CardContent>
         </Card>

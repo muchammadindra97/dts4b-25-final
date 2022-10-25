@@ -1,11 +1,12 @@
 import React, {Fragment} from 'react';
 import {Box, Button, Grid, Link, Stack, Typography} from "@mui/material";
-import {Link as RouterLink, Navigate, useParams} from "react-router-dom";
+import {Link as RouterLink, useParams} from "react-router-dom";
 import {useGetNewsByUUIDQuery, useGetSimilarNewsByUUIDQuery} from "../services/newsApi";
 import NewsItem from "./NewsItem";
 import CircularLoading from "./CircularLoading";
+import {convertDate} from "../utils/helper";
 
-function Content() {
+function Detail() {
   const params = useParams();
   const {data: news, isLoading: newsIsLoading} = useGetNewsByUUIDQuery(params.uuid);
   const {data: similarNewsList, isLoading: similarNewsListIsLoading} = useGetSimilarNewsByUUIDQuery(params.uuid, 3);
@@ -46,7 +47,7 @@ function Content() {
               alignItems="center"
             >
               <Typography variant="p" color="text.secondary">
-                {new Date(news.published_at).toDateString()}
+                {convertDate(news.published_at)}
               </Typography>
               <Link component={Button} variant="contained" disableElevation href={news.url} target="_blank">
                 Open Original Article
@@ -75,20 +76,6 @@ function Content() {
         </Grid> : <Grid item><CircularLoading /></Grid>
       }
     </Grid>
-  );
-}
-
-function Detail() {
-  const isLogin = false;
-
-  if (isLogin) {
-    return (
-      <Content />
-    );
-  }
-
-  return (
-    <Navigate to="/locked" />
   );
 }
 

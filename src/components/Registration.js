@@ -2,9 +2,18 @@ import React, {Fragment, useState} from 'react';
 import {Avatar, Box, Button, Link, TextField, Typography} from "@mui/material";
 import {LockOutlined} from "@mui/icons-material";
 import {Link as RouterLink} from "react-router-dom";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {auth} from "../configs/firebase";
+import {useDispatch} from "react-redux";
+import {show as showSnackbar} from "../stores/snackbarSlice";
+import {login as setLogin} from "../stores/authSlice";
+
+const initialForm = {email: '', password: ''};
 
 function Registration() {
-  const [form, setForm] = useState({fullName: '', email: '', password: ''});
+  const [form, setForm] = useState(initialForm);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const dispatch = useDispatch();
 
   const inputFieldHandler = (event) => {
     const inputTarget = event.target;
@@ -17,9 +26,32 @@ function Registration() {
     });
   };
 
-  const formSubmitHandler = (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(form);
+
+    if(event.target.reportValidity() === false) return;
+
+    setIsProcessing(true);
+
+    try {
+      const result = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const user = result.user.toJSON();
+      dispatch(setLogin({user}));
+      setForm(initialForm);
+      dispatch(showSnackbar({
+        title: 'Success',
+        severity: 'success',
+        message: 'Registration complete!'
+      }));
+    } catch (e) {
+      dispatch(showSnackbar({
+        title: 'Error',
+        severity: 'error',
+        message: `${e.message}`
+      }));
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -31,18 +63,6 @@ function Registration() {
         Sign up
       </Typography>
       <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={formSubmitHandler}>
-        <TextField
-          margin="normal"
-          autoComplete="given-name"
-          name="fullName"
-          required
-          fullWidth
-          id="fullName"
-          label="Full Name"
-          autoFocus
-          onChange={inputFieldHandler}
-          value={form.fullName}
-        />
         <TextField
           margin="normal"
           required
@@ -72,6 +92,7 @@ function Registration() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={isProcessing}
         >
           Sign Up
         </Button>
