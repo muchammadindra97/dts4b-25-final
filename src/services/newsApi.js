@@ -22,16 +22,16 @@ export const newsApi = createApi({
   baseQuery: baseQueryWithToken,
   endpoints: (builder) => ({
     getTopStories: builder.query({
-      query: (limit = 2) => `/top?sort=published_on&locale=us&limit=${limit}`
+      query: ({limit = 2}) => `/top?sort=published_on&locale=us&limit=${limit}`
     }),
     getAllNews: builder.query({
-      query: (limit = 5) => `/all?sort=published_on&language=en&limit=${limit}`
+      query: ({limit = 5, search = ''}) => `/all?sort=published_on&language=en&limit=${limit}&search=${search}`
     }),
     getNewsByUUID: builder.query({
-      query: (uuid) => `/uuid/${uuid}`
+      query: ({uuid}) => `/uuid/${uuid}`
     }),
     getSimilarNewsByUUID: builder.query({
-      query: (uuid, limit = 3) => `/similar/${uuid}?limit=${limit}&language=en`
+      query: ({uuid, limit = 3}) => `/similar/${uuid}?limit=${limit}&language=en`
     }),
   })
 });

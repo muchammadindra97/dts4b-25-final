@@ -8,8 +8,8 @@ import {convertDate} from "../utils/helper";
 
 function Detail() {
   const params = useParams();
-  const {data: news, isLoading: newsIsLoading} = useGetNewsByUUIDQuery(params.uuid);
-  const {data: similarNewsList, isLoading: similarNewsListIsLoading} = useGetSimilarNewsByUUIDQuery(params.uuid, 3);
+  const {data: news, isFetching : newsIsLoading} = useGetNewsByUUIDQuery({uuid: params.uuid});
+  const {data: similarNewsList, isFetching : similarNewsListIsLoading} = useGetSimilarNewsByUUIDQuery({uuid: params.uuid, limit: 3});
 
   return (
     <Grid container spacing={2} justifyContent="center">

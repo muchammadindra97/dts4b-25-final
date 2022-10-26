@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TopStory from "./TopStory";
-import {Grid, Typography} from "@mui/material";
+import {Button, Grid, Stack, TextField, Typography} from "@mui/material";
 import NewsItem from "./NewsItem";
 import {useGetAllNewsQuery, useGetTopStoriesQuery} from "../services/newsApi";
 import CircularLoading from "./CircularLoading";
+import useDebounce from "../hooks/useDebounce";
 
 function Home() {
-  const { data: topStoriesData, isLoading: topStoriesIsLoading } = useGetTopStoriesQuery(2);
-  const { data: allNewsData, isLoading: allNewsIsLoading } = useGetAllNewsQuery(5);
+  const { data: topStoriesData, isFetching: topStoriesIsLoading } = useGetTopStoriesQuery({limit: 2});
+  const [ keyword, setKeyword ] = useState('');
+  const debouncedSearchTerm = useDebounce(keyword, 1000);
 
   return (
     <div>
@@ -19,15 +21,50 @@ function Home() {
           <TopStory news={story} key={story.uuid}/>
         )) : <Grid item><CircularLoading /></Grid>}
       </Grid>
-      <Typography component="h2" variant="h5" mb={2}>
-        Latest News
-      </Typography>
-      <Grid container spacing={3} justifyContent="center">
-        {!allNewsIsLoading ? allNewsData.data.map((news) => (
-          <NewsItem news={news} key={news.uuid}/>
-        )) : <Grid item><CircularLoading /></Grid>}
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={2}
+        mb={2}
+      >
+        <Grid item xs={12} sm="auto">
+          <Typography component="h2" variant="h5">
+            {keyword ? 'Result' : 'Latest News'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm="auto">
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            {keyword && <Button type="button" onClick={() => {setKeyword('');}}>Cancel</Button>}
+            <TextField
+              size="small"
+              label="Search News"
+              value={keyword}
+              onChange={(e) => {setKeyword(e.target.value);}}
+            />
+          </Stack>
+        </Grid>
       </Grid>
+      <LatestNews keyword={debouncedSearchTerm.trim()} />
     </div>
+  );
+}
+
+function LatestNews({keyword}) {
+  const { data: allNewsData, isFetching: allNewsIsLoading } = useGetAllNewsQuery({limit: 5, search: keyword});
+
+  return (
+    <Grid container spacing={3} justifyContent="center">
+      {!allNewsIsLoading ? allNewsData.data.map((news) => (
+        <NewsItem news={news} key={news.uuid}/>
+      )) : <Grid item><CircularLoading /></Grid>}
+    </Grid>
   );
 }
 
